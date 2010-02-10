@@ -1,7 +1,7 @@
-sinatra_gmail_auth
+sinatra_auth_gmail
 ==================
 
-A sinatra app the provides a gem that...
+A sinatra app that lets you authenticate users via gmail.
 
 Developing
 ==========
@@ -14,15 +14,32 @@ Gemfile
     gem "sinatra_auth_gmail"
     # vim:ft=ruby
 
-Example
--------
-    module Fooby
-      class App < Sinatra::Base
-        register Sinatra::Auth::Gmail
-          get '/' do
-            authorize!
-            haml "%h2= 'Hello There, #{gmail_user.full_name}!'"
-          end
-        end
+Example config.ru
+-----------------
+    require 'rubygems'
+    require 'bundler'
+
+    Bundler.setup
+    Bundler.require
+
+    class MyFirstGmailApp < Sinatra::Base
+      use Rack::Session::Cookie
+      register Sinatra::Auth::Gmail
+
+      get '/' do
+        authorize!
+        haml "%h2= 'Hello There, #{gmail_user.full_name}!'"
       end
     end
+
+    run MyFirstGmailApp
+
+Executing
+---------
+    % bundle install
+    % bundle exec rackup
+
+Visiting
+--------
+    % open http://localhost:9292
+
