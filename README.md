@@ -1,7 +1,7 @@
-sinatra_gmail_auth
+sinatra_auth_gmail
 ==================
 
-A sinatra app the provides a gem that...
+A sinatra app that lets you authenticate users via gmail.
 
 Developing
 ==========
@@ -19,10 +19,9 @@ Example
     module Fooby
       class App < Sinatra::Base
         register Sinatra::Auth::Gmail
-          get '/' do
-            authorize!
-            haml "%h2= 'Hello There, #{gmail_user.full_name}!'"
-          end
+        get '/' do
+          authorize!
+          haml "%h2= 'Hello There, #{gmail_user.full_name}!'"
         end
       end
     end
