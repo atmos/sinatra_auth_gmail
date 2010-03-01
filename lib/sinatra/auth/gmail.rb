@@ -9,20 +9,39 @@ module Sinatra
       end
 
       module Helpers
+        def warden
+          env['warden']
+        end
+
         def authorized?
-          env['warden'].authenticate!
+          puts "authorized? depricated.  Use authenticate! instead"
+          authenticate!
+        end
+
+        def authenticate!(*args)
+          warden.authenticate!(*args)
+        end
+
+        def authenticated?(*args)
+          warden.authenticated?(*args)
         end
 
         def authorize!
-          throw(:warden) unless authorized?
+          puts "authorize! is depricated. Use authenticate! instead"
+          warden.authenticate!
         end
 
         def logout!
-          env['warden'].logout
+          warden.logout
         end
 
         def gmail_user
-          env['warden'].user
+          puts "gmail_user is depricated.  Use google_user instead"
+          google_user
+        end
+
+        def google_user
+          warden.user
         end
       end
 
@@ -33,6 +52,7 @@ module Sinatra
 
           manager[:google_apps_endpoint] = 'http://www.google.com/accounts/o8/id'
         end
+
         app.helpers Helpers
 
         app.get '/logout' do
@@ -45,15 +65,15 @@ module Sinatra
         register Sinatra::Auth::Gmail
 
         before do
-          authorize!
+          authenticate!
         end
 
         get '/' do
-          haml "%h2= 'Hello There, #{gmail_user.full_name}!'"
+          haml "%h2= 'Hello There, #{google_user.full_name}!'"
         end
 
         get '/another_route' do
-          haml "%h2= 'Hello There, #{gmail_user.full_name}!'"
+          haml "%h2= 'Hello There, #{google_user.full_name}!'"
         end
       end
     end
