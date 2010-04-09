@@ -1,7 +1,7 @@
 module Sinatra
   module Auth
     module Gmail
-      class BadAuthentication < Sinatra::Default
+      class BadAuthentication < Sinatra::Base
         get '/unauthenticated' do
           status 403
           haml "%h3= 'Unable to authenticate, sorry bud.'"
